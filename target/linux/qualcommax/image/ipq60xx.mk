@@ -59,21 +59,20 @@ endef
 TARGET_DEVICES += glinet_gl-axt1800
 
 define Device/jdc_ax1800-pro
-	$(call Device/FitImage)
-	DEVICE_VENDOR := JD Cloud
-	DEVICE_MODEL := JDC AX1800 Pro
-	DEVICE_DTS_CONFIG := config@cp03-c2
-	DEVICE_DTS := ipq6000-jdc-ax1800-pro
-	SOC := ipq6000
-	DEVICE_PACKAGES := ipq-wifi-jdc_ax1800-pro kmod-fs-ext4 mkf2fs f2fsck kmod-fs-f2fs
-	BLOCKSIZE := 64k
-	KERNEL_SIZE := 6144k
-	IMAGES += kernel.bin rootfs.bin factory.bin
-	IMAGE/kernel.bin := append-kernel
-	IMAGE/rootfs.bin := append-rootfs | pad-rootfs | pad-to $$(BLOCKSIZE)
-	IMAGE/factory.bin := append-kernel | pad-to $$$${KERNEL_SIZE}  |  append-rootfs | append-metadata
+        $(call Device/FitImage)
+        $(call Device/EmmcImage)
+        DEVICE_VENDOR := JD Cloud
+        DEVICE_MODEL := JDC AX1800 Pro
+        DEVICE_DTS_CONFIG := config@cp03-c2
+        DEVICE_DTS := ipq6000-jdc-ax1800-pro
+        SOC := ipq6000
+        DEVICE_PACKAGES := ipq-wifi-jdc_ax1800-pro kmod-fs-ext4 mkf2fs f2fsck kmod-fs-f2fs
+        BLOCKSIZE := 64k
+        KERNEL_SIZE := 6144k
+        IMAGE/factory.bin := append-kernel | pad-to $$$${KERNEL_SIZE}  |  append-rootfs | append-metadata
 endef
 TARGET_DEVICES += jdc_ax1800-pro
+
 
 define Device/linksys_mr7350
 	$(call Device/FitImage)
