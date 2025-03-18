@@ -124,6 +124,11 @@ platform_do_upgrade() {
 		fw_setenv auto_recovery yes
 		nand_do_upgrade "$1"
 		;;
+		jdc,ax1800-pro)
+		kernelname="0:HLOS"
+		rootfsname="rootfs"
+		mmc_do_upgrade "$1"
+		;;
 	netgear,wax214|\
 	qihoo,360v6)
 		nand_do_upgrade "$1"

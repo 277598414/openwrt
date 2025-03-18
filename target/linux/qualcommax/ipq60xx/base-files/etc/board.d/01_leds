@@ -19,6 +19,9 @@ linksys,mr7350)
 	ucidef_set_led_netdev "wan-port-link" "WAN-PORT-LINK" "90000.mdio-1:04:green:wan" "wan" "link_10 link_100 link_1000"
 	ucidef_set_led_netdev "wan-port-traffic" "WAN-PORT-TRAFFIC" "90000.mdio-1:04:orange:wan" "wan" "tx rx link_10 link_100 link_1000"
 	;;
+jdc,ax1800-pro)
+        ucidef_set_led_netdev "wan" "WAN" "net_blue" "eth3"
+        ;;
 yuncore,fap650)
 	ucidef_set_led_netdev "wlan5ghz" "WLAN 5GHz LED" "blue:wlan-5ghz" "wlan0" "tx rx"
 	ucidef_set_led_netdev "wlan2ghz" "WLAN 2.4GHz LED" "green:wlan-2ghz" "wlan1" "tx rx"
