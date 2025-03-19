@@ -22,11 +22,11 @@ case "$FIRMWARE" in
 		ath11k_patch_mac $(macaddr_add $addr 1) 1
 		ath11k_set_macflag
 		;;
-	jdc,ax1800-pro)
-		caldata_extract_mmc "0:ART" 0x1000 0x10000
-		;;
 	netgear,wax214)
 		caldata_extract "0:art" 0x1000 0x10000
+		;;
+	jdc,ax1800-pro)
+		caldata_extract_mmc "0:ART" 0x1000 0x10000
 		;;
 	qihoo,360v6)
 		caldata_extract "0:art" 0x1000 0x10000
