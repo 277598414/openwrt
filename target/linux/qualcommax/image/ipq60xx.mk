@@ -11,6 +11,12 @@ define Device/8devices_mango-dvk
 endef
 TARGET_DEVICES += 8devices_mango-dvk
 
+define Device/EmmcImage
+	IMAGES += factory.bin sysupgrade.bin
+	IMAGE/factory.bin := append-rootfs | pad-rootfs | pad-to 64k
+	IMAGE/sysupgrade.bin/squashfs := append-rootfs | pad-to 64k | sysupgrade-tar rootfs=$$$$@ | append-metadata
+endef
+
 define Device/cambiumnetworks_xe3-4
        $(call Device/FitImage)
        $(call Device/UbiFit)
@@ -32,8 +38,8 @@ define Device/jdc_ax1800-pro
 	DEVICE_DTS_CONFIG := config@cp03-c2
 	DEVICE_DTS := ipq6000-jdc-ax1800-pro
 	SOC := ipq6000
-	DEVICE_PACKAGES := ipq-wifi-jdc_ax1800-pro kmod-fs-ext4 mkf2fs f2fsck kmod-fs-f2fs
-	BLOCKSIZE := 128k
+	DEVICE_PACKAGES := ipq-wifi-jdc_ax1800-pro
+	BLOCKSIZE := 64k
 	KERNEL_SIZE := 6144k
 	IMAGES += kernel.bin rootfs.bin factory.bin
 	IMAGE/kernel.bin := append-kernel
