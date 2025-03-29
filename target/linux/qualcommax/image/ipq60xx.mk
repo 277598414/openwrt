@@ -13,6 +13,12 @@ define Device/8devices_mango-dvk
 endef
 TARGET_DEVICES += 8devices_mango-dvk
 
+define Device/EmmcImage
+	IMAGES += factory.bin sysupgrade.bin
+	IMAGE/factory.bin := append-rootfs | pad-rootfs | pad-to 64k
+	IMAGE/sysupgrade.bin/squashfs := append-rootfs | pad-to 64k | sysupgrade-tar rootfs=$$$$@ | append-metadata
+endef
+
 define Device/cambiumnetworks_xe3-4
 	$(call Device/FitImage)
 	$(call Device/UbiFit)
@@ -54,38 +60,38 @@ define Device/glinet_gl-axt1800
 endef
 TARGET_DEVICES += glinet_gl-axt1800
 
-define Device/linksys_mr
+define Device/jdc_ax1800-pro
 	$(call Device/FitImage)
-	DEVICE_VENDOR := Linksys
-	BLOCKSIZE := 128k
-	PAGESIZE := 2048
-	KERNEL_SIZE := 8192k
-	IMAGES += factory.bin
-	IMAGE/factory.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) | append-ubi | linksys-image type=$$$$(DEVICE_MODEL)
-	DEVICE_PACKAGE := kmod-usb-ledtrig-usbport
+	$(call Device/EmmcImage)
+	DEVICE_VENDOR := JD Cloud
+	DEVICE_MODEL := JDC AX1800 Pro
+	DEVICE_DTS_CONFIG := config@cp03-c2
+	DEVICE_DTS := ipq6000-jdc-ax1800-pro
+	SOC := ipq6000
+	DEVICE_PACKAGES := ipq-wifi-jdc_ax1800-pro kmod-fs-ext4 mkf2fs f2fsck kmod-fs-f2fs
+	BLOCKSIZE := 64k
+	KERNEL_SIZE := 6144k
+	IMAGE/factory.bin := append-kernel | pad-to $$$${KERNEL_SIZE}  |  append-rootfs | append-metadata
 endef
+TARGET_DEVICES += jdc_ax1800-pro
 
 define Device/linksys_mr7350
-	$(call Device/linksys_mr)
+	$(call Device/FitImage)
+	DEVICE_VENDOR := Linksys
 	DEVICE_MODEL := MR7350
-	NAND_SIZE := 256m
-	IMAGE_SIZE := 75776k
 	SOC := ipq6000
-	DEVICE_PACKAGES += ipq-wifi-linksys_mr7350 kmod-leds-pca963x
+	NAND_SIZE := 256m
+	KERNEL_SIZE := 8192k
+	BLOCKSIZE := 128k
+	PAGESIZE := 2048
+	IMAGE_SIZE := 75776k
+	IMAGES += factory.bin
+	IMAGE/factory.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) | \
+		append-ubi | linksys-image type=MR7350
+	DEVICE_PACKAGES := ipq-wifi-linksys_mr7350 \
+		kmod-leds-pca963x kmod-usb-ledtrig-usbport
 endef
 TARGET_DEVICES += linksys_mr7350
-
-define Device/linksys_mr7500
-	$(call Device/linksys_mr)
-	DEVICE_MODEL := MR7500
-	SOC := ipq6018
-	NAND_SIZE := 512m
-	IMAGE_SIZE := 147456k
-	DEVICE_PACKAGES += ipq-wifi-linksys_mr7500 \
-		ath11k-firmware-qcn9074 kmod-ath11k-pci \
-		kmod-leds-pwm kmod-phy-aquantia
-endef
-TARGET_DEVICES += linksys_mr7500
 
 define Device/netgear_wax214
 	$(call Device/FitImage)
