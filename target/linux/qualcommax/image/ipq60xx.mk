@@ -1,15 +1,5 @@
 DEVICE_VARS += TPLINK_SUPPORT_STRING
 
-define Build/wax610-netgear-tar
-	mkdir $@.tmp
-	mv $@ $@.tmp/nand-ipq6018-apps.img
-	md5sum $@.tmp/nand-ipq6018-apps.img | cut -c 1-32 > $@.tmp/nand-ipq6018-apps.md5sum
-	echo "WAX610" > $@.tmp/metadata.txt
-	echo "WAX610-610Y_V99.9.9.9" > $@.tmp/version
- 	tar -C $@.tmp/ -cf $@ .
-	rm -rf $@.tmp
-endef
-
 define Device/8devices_mango-dvk
 	$(call Device/FitImageLzma)
 	DEVICE_VENDOR := 8devices
@@ -22,6 +12,12 @@ define Device/8devices_mango-dvk
 	DEVICE_PACKAGES := ipq-wifi-8devices_mango
 endef
 TARGET_DEVICES += 8devices_mango-dvk
+
+define Device/EmmcImage
+	IMAGES += factory.bin sysupgrade.bin
+	IMAGE/factory.bin := append-rootfs | pad-rootfs | pad-to 64k
+	IMAGE/sysupgrade.bin/squashfs := append-rootfs | pad-to 64k | sysupgrade-tar rootfs=$$$$@ | append-metadata
+endef
 
 define Device/cambiumnetworks_xe3-4
 	$(call Device/FitImage)
@@ -63,6 +59,21 @@ define Device/glinet_gl-axt1800
 	SUPPORTED_DEVICES += glinet,axt1800
 endef
 TARGET_DEVICES += glinet_gl-axt1800
+
+define Device/jdc_ax1800-pro
+	$(call Device/FitImage)
+	$(call Device/EmmcImage)
+	DEVICE_VENDOR := JD Cloud
+	DEVICE_MODEL := JDC AX1800 Pro
+	DEVICE_DTS_CONFIG := config@cp03-c2
+	DEVICE_DTS := ipq6000-jdc-ax1800-pro
+	SOC := ipq6000
+	DEVICE_PACKAGES := ipq-wifi-jdc_ax1800-pro kmod-fs-ext4 mkf2fs f2fsck kmod-fs-f2fs
+	BLOCKSIZE := 64k
+	KERNEL_SIZE := 6144k
+	IMAGE/factory.bin := append-kernel | pad-to $$$${KERNEL_SIZE}  |  append-rootfs | append-metadata
+endef
+TARGET_DEVICES += jdc_ax1800-pro
 
 define Device/linksys_mr
 	$(call Device/FitImage)
@@ -110,32 +121,6 @@ define Device/netgear_wax214
 endef
 TARGET_DEVICES += netgear_wax214
 
-define Device/netgear_wax610-common
-	$(call Device/FitImage)
-	DEVICE_VENDOR := Netgear
-	BLOCKSIZE := 128k
-	PAGESIZE := 2048
-	DEVICE_DTS_CONFIG := config@cp03-c1
-	SOC := ipq6010
-	KERNEL_IN_UBI := 1
-	IMAGES += ui-factory.tar
-	IMAGE/ui-factory.tar := append-ubi | qsdk-ipq-factory-nand | pad-to 4096 | wax610-netgear-tar
-endef
-
-define Device/netgear_wax610
-	$(Device/netgear_wax610-common)
-	DEVICE_MODEL := WAX610
-	DEVICE_PACKAGES := ipq-wifi-netgear_wax610
-endef
-TARGET_DEVICES += netgear_wax610
-
-define Device/netgear_wax610y
-	$(Device/netgear_wax610-common)
-	DEVICE_MODEL := WAX610Y
-	DEVICE_PACKAGES := ipq-wifi-netgear_wax610y
-endef
-TARGET_DEVICES += netgear_wax610y
-
 define Device/qihoo_360v6
 	$(call Device/FitImage)
 	$(call Device/UbiFit)
@@ -166,22 +151,6 @@ define Device/tplink_eap610-outdoor
 		EAP610-Outdoor(TP-Link|CA|AX1800-D):1.0
 endef
 TARGET_DEVICES += tplink_eap610-outdoor
-
-define Device/tplink_eap623od-hd-v1
-	$(call Device/FitImage)
-	$(call Device/UbiFit)
-	DEVICE_VENDOR := TP-Link
-	DEVICE_MODEL := EAP623-Outdoor HD
-	DEVICE_VARIANT := v1
-	BLOCKSIZE := 128k
-	PAGESIZE := 2048
-	SOC := ipq6018
-	DEVICE_PACKAGES := ipq-wifi-tplink_eap623od-hd-v1 kmod-phy-realtek
-	IMAGES += web-ui-factory.bin
-	IMAGE/web-ui-factory.bin := append-ubi | tplink-image-2022
-	TPLINK_SUPPORT_STRING := SupportList:\r\nEAP623-Outdoor HD(TP-Link|UN|AX1800-D):1.0\r\n
-endef
-TARGET_DEVICES += tplink_eap623od-hd-v1
 
 define Device/yuncore_fap650
 	$(call Device/FitImage)
