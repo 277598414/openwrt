@@ -32,7 +32,7 @@ tplink,eap610-outdoor)
 jdc,ax1800-pro)
 	mmcpart="$(find_mmc_part 0:APPSBLENV)"
 	[ -n "$mmcpart" ] && \
-		ubootenv_add_uci_config "$mmcpart" "0x0" "0x40000" "0x20000" "2"
+	ubootenv_add_uci_config "$mmcpart" "0x0" "0x40000" "0x20000" "2"
 	;;
 yuncore,fap650)
 	ubootenv_add_mtd "0:appsblenv" "0x0" "0x10000" "0x10000"
