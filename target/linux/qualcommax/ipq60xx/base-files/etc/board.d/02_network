@@ -17,6 +17,9 @@ ipq60xx_setup_interfaces()
 	cambiumnetworks,xe3-4)
 		ucidef_set_interface_lan "lan1 lan2" "dhcp"
 		;;
+	jdc,ax1800-pro)
+		ucidef_set_interfaces_lan_wan "eth0 eth1 eth2" "eth3"
+		;;
 	netgear,wax214)
 		ucidef_set_interfaces_lan_wan "lan"
 		;;
