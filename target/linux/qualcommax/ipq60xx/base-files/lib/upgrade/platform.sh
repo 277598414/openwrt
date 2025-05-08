@@ -113,10 +113,13 @@ platform_do_upgrade() {
 	glinet,gl-ax1800|\
 	glinet,gl-axt1800|\
 	netgear,wax214|\
-	netgear,wax610|\
-	netgear,wax610y|\
 	qihoo,360v6)
 		nand_do_upgrade "$1"
+		;;
+	jdc,ax1800-pro)
+		kernelname="0:HLOS"
+		rootfsname="rootfs"
+		mmc_do_upgrade "$1"
 		;;
 	linksys,mr7350|\
 	linksys,mr7500)
@@ -133,8 +136,7 @@ platform_do_upgrade() {
 		fw_setenv auto_recovery yes
 		nand_do_upgrade "$1"
 		;;
-	tplink,eap610-outdoor|\
-	tplink,eap623od-hd-v1)
+	tplink,eap610-outdoor)
 		tplink_do_upgrade "$1"
 		;;
 	yuncore,fap650)
