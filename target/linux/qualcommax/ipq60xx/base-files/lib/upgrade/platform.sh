@@ -133,9 +133,13 @@ platform_do_upgrade() {
 		fw_setenv auto_recovery yes
 		nand_do_upgrade "$1"
 		;;
+	jdc,ax1800-pro)
+		kernelname="0:HLOS"
+		rootfsname="rootfs"
+		mmc_do_upgrade "$1"
+		;;
 	tplink,eap610-outdoor|\
-	tplink,eap623od-hd-v1|\
-	tplink,eap625-outdoor-hd-v1)
+	tplink,eap623od-hd-v1)
 		tplink_do_upgrade "$1"
 		;;
 	yuncore,fap650)
