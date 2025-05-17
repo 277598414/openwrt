@@ -35,6 +35,9 @@ case "$FIRMWARE" in
 	netgear,wax214)
 		caldata_extract "0:art" 0x1000 0x10000
 		;;
+	jdc,ax1800-pro)
+		caldata_extract_mmc "0:ART" 0x1000 0x10000
+		;;
 	netgear,wax610|\
 	netgear,wax610y)
 		caldata_extract "0:art" 0x1000 0x10000
@@ -51,8 +54,7 @@ case "$FIRMWARE" in
 		ath11k_set_macflag
 		;;
 	tplink,eap610-outdoor|\
-	tplink,eap623od-hd-v1|\
-	tplink,eap625-outdoor-hd-v1)
+	tplink,eap623od-hd-v1)
 		caldata_from_file "/tmp/factory_data/radio" 0 0x10000
 		label_mac=$(get_mac_binary /tmp/factory_data/default-mac 0)
 		ath11k_patch_mac $label_mac 1
