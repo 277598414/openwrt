@@ -26,7 +26,7 @@ endef
 
 define Device/EmmcImage
 	IMAGES += factory.bin
-	IMAGE/factory.bin := append-rootfs | pad-rootfs | pad-to 64k
+	IMAGE/factory.bin := append-rootfs | pad-rootfs | pad-to 6144k
 	IMAGE/sysupgrade.bin/squashfs := append-rootfs | pad-to 64k | sysupgrade-tar rootfs=$$$$@ | append-metadata
 endef
 
