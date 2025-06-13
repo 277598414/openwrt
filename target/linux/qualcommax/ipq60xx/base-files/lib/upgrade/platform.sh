@@ -62,3 +62,11 @@ platform_do_upgrade() {
 		;;
 	esac
 }
+
+platform_copy_config() {
+	case "$(board_name)" in
+	jdc,ax1800-pro)
+		emmc_copy_config
+		;;
+	esac
+}
