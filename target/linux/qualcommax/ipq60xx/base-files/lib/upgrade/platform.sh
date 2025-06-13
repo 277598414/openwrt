@@ -123,6 +123,11 @@ platform_do_upgrade() {
 	qihoo,360v6)
 		nand_do_upgrade "$1"
 		;;
+	jdc,ax1800-pro)
+		kernelname="0:HLOS"
+		rootfsname="rootfs"
+		mmc_do_upgrade "$1"
+		;;
 	linksys,mr7350|\
 	linksys,mr7500)
 		boot_part="$(fw_printenv -n boot_part)"
