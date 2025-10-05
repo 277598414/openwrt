@@ -538,6 +538,11 @@ function iface_reload_config(name, phydev, config, old_config)
 		return false;
 	}
 
+	if (iface.state() != "ENABLED") {
+		hostapd.printf(`Interface ${iface_name} is not fully configured`);
+		return false;
+	}
+
 	let first_bss = get_config_bss(name, old_config, 0);
 	if (!first_bss) {
 		hostapd.printf(`Could not find bss of previous interface ${iface_name}`);
@@ -1008,6 +1013,7 @@ function mld_add_bss(name, data, phy_list, i)
 	if (!config.phy)
 		return;
 
+	hostapd.printf(`Add MLD interface ${name}`);
 	wdev_remove(name);
 	let phydev = phy_list[config.phy];
 	if (!phydev) {
@@ -1111,7 +1117,8 @@ function mld_set_config(config)
 	// add new interfaces
 	hostapd.data.mld = new_mld;
 	for (let name, data in new_mld)
-		mld_add_bss(name, data, phy_list);
+		if (!data.ifname)
+			mld_add_bss(name, data, phy_list);
 
 	if (!new_config)
 		return;
