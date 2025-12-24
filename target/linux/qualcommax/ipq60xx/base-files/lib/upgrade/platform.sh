@@ -127,6 +127,11 @@ platform_do_upgrade() {
 		remove_oem_ubi_volume ubi_rootfs
 		nand_do_upgrade "$1"
 		;;
+	jdc,ax1800-pro)
+		kernelname="0:HLOS"
+		rootfsname="rootfs"
+		mmc_do_upgrade "$1"
+		;;
 	linksys,mr7350|\
 	linksys,mr7500)
 		boot_part="$(fw_printenv -n boot_part)"
@@ -161,6 +166,14 @@ platform_do_upgrade() {
 		;;
 	*)
 		default_do_upgrade "$1"
+		;;
+	esac
+}
+
+platform_copy_config() {
+	case "$(board_name)" in
+	jdc,ax1800-pro)
+		emmc_copy_config
 		;;
 	esac
 }
